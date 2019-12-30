@@ -46,7 +46,7 @@ EVM은 모든 이더리움 노드에서 로컬 인스턴스로 실행되지만 E
 
 ((("transactions","smart contracts and")))Importantly, contracts _only run if they are called by a transaction_. All smart contracts in Ethereum are executed, ultimately, because of a transaction initiated from an EOA. A contract can call another contract that can call another contract, and so on, but the first contract in such a chain of execution will always have been called by a transaction from an EOA. Contracts never run “on their own” or “in the background.” Contracts effectively lie dormant until a transaction triggers execution, either directly or indirectly as part of a chain of contract calls. It is also worth noting that smart contracts are not executed "in parallel" in any sense&#x2014;the Ethereum world computer can be considered to be a single-threaded machine.
 
-*중요한 것은 계약이 트랜잭션에 의해 호출된 경우에만 실행된다는 것입니다. 이더리움의 모든 스마트 계약은 궁극적으로 EOA에서 시작된 거래로 인해 실행됩니다. 계약은 다른 계약을 호출할 수있는 다른 계약을 호출 할 수 있지만, 그러한 실행 체인의 첫 번째 계약은 항상 EOA의 트랜잭션에 의해 호출되었을 것입니다. 계약은 "자체적으로" 또는 "백그라운드에서" 실행되지 않습니다. 계약은 일련의 직간접적으로 계약 콜의 일부로서, 트랜잭션이 실행을 트리거 할 때까지 휴면 상태에 있습니다(Contracts effectively lie dormant until a transaction triggers execution, either directly or indirectly as part of a chain of contract calls). 스마트 컨트랙트는 어떤 의미에서든 "병렬"로 실행되지 않는다는 점에 주목할 필요가 있습니다. 이더리움 월드 컴퓨터는 단일 스레드 머신(single-threaded machine)으로 간주될 수 있습니다.*
+중요한 것은 계약이 트랜잭션에 의해 호출된 경우에만 실행된다는 것입니다. 이더리움의 모든 스마트 계약은 궁극적으로 EOA에서 시작된 거래로 인해 실행됩니다. 계약은 다른 계약을 호출할 수있는 다른 계약을 호출 할 수 있지만, 그러한 실행 체인의 첫 번째 계약은 항상 EOA의 트랜잭션에 의해 호출되었을 것입니다. 계약은 "자체적으로" 또는 "백그라운드에서" 실행되지 않습니다. 계약은 일련의 직간접적으로 계약 콜의 일부로서, 트랜잭션이 실행을 트리거 할 때까지 휴면 상태에 있습니다(Contracts effectively lie dormant until a transaction triggers execution, either directly or indirectly as part of a chain of contract calls). 스마트 컨트랙트는 어떤 의미에서든 "병렬"로 실행되지 않는다는 점에 주목할 필요가 있습니다. 이더리움 월드 컴퓨터는 단일 스레드 머신(single-threaded machine)으로 간주될 수 있습니다.
 
 * 계약 실행이 불가능했을 때
 
@@ -58,7 +58,7 @@ EVM은 모든 이더리움 노드에서 로컬 인스턴스로 실행되지만 E
 
 ((("smart contracts","deleting")))As mentioned previously, it is important to remember that a contract’s code cannot be changed. However, a contract can be “deleted,” removing the code and its internal state (storage) from its address, leaving a blank account. Any transactions sent to that account address after the contract has been deleted do not result in any code execution, because there is no longer any code there to execute. ((("SELFDESTRUCT opcode")))To delete a contract, you execute an EVM opcode called +SELFDESTRUCT+ (previously called +SUICIDE+). ((("negative gas")))That operation costs “negative gas,” a gas refund, thereby incentivizing the release of network client resources from the deletion of stored state. Deleting a contract in this way does not remove the transaction history (past) of the contract, since the blockchain itself is immutable. It is also important to note that the +SELFDESTRUCT+ capability will only be available if the contract author programmed the smart contract to have that functionality. If the contract's code does not have a +SELFDESTRUCT+ opcode, or it is inaccessible, the smart contract cannot be deleted.
 
-*앞에서 언급했듯이 계약 코드는 변경할 수 없습니다. 그러나 계약을 “삭제”하여 코드와 코드의 내부 상태(저장소)를 주소에서 제거하여 빈 계정을 남길 수 있습니다. 계약이 삭제된 후 해당 계정 주소로 전송된 트랜잭션은 더 이상 실행할 코드가 없기 때문에 코드가 실행되지 않습니다. 계약을 삭제하려면 SELFDESTRUCT(이전의 SUICIDE)라는 EVM opcode를 실행합니다. 이 작업에는 gas 환불인 "negative gas"가 필요하므로, 저장된 상태의 삭제에서 네트워크 클라이언트 리소스의 릴리스를 장려합니다(incentivizing the release of network client resources from the deletion of stored state). 이러한 방식으로 계약을 삭제해도 블록체인 자체는 변경할 수 없으므로 계약의 거래 내역(과거)을 제거하지 않습니다. 계약 작성자가 스마트 계약에 해당 기능을 갖도록 프로그래밍 한 경우에만 SELFDESTRUCT 기능을 사용할 수 있습니다. 계약 코드에 SELFDESTRUCT opcode가 없거나 액세스 할 수 없는 경우 스마트 계약을 삭제할 수 없습니다.*
+앞에서 언급했듯이 계약 코드는 변경할 수 없습니다. 그러나 계약을 “삭제”하여 코드와 코드의 내부 상태(저장소)를 주소에서 제거하여 빈 계정을 남길 수 있습니다. 계약이 삭제된 후 해당 계정 주소로 전송된 트랜잭션은 더 이상 실행할 코드가 없기 때문에 코드가 실행되지 않습니다. 계약을 삭제하려면 SELFDESTRUCT(이전의 SUICIDE)라는 EVM opcode를 실행합니다. 이 작업에는 gas 환불인 "negative gas"가 필요하므로, 저장된 상태의 삭제에서 네트워크 클라이언트 리소스의 릴리스를 장려합니다(incentivizing the release of network client resources from the deletion of stored state). 이러한 방식으로 계약을 삭제해도 블록체인 자체는 변경할 수 없으므로 계약의 거래 내역(과거)을 제거하지 않습니다. 계약 작성자가 스마트 계약에 해당 기능을 갖도록 프로그래밍 한 경우에만 SELFDESTRUCT 기능을 사용할 수 있습니다. 계약 코드에 SELFDESTRUCT opcode가 없거나 액세스 할 수 없는 경우 스마트 계약을 삭제할 수 없습니다.
 
 [[high_level_languages]]
 === Introduction to Ethereum High-Level Languages(넘어가도 될듯)
@@ -462,6 +462,8 @@ As you can see in our +Faucet+ example, we have one payable function (the fallba
 
 ((("constructor function")))((("smart contracts","constructor function")))((("Solidity","contract constructor function")))There is a special function that is only used once. When a contract is created, it also runs the _constructor function_ if one exists, to initialize the state of the contract. The constructor is run in the same transaction as the contract creation. The constructor function is optional; you'll notice our +Faucet+ example doesn't have one.
 
+한 번만 사용되는 특수 기능이 있습니다. 계약이 작성되면 계약 상태를 초기화하기 위해 생성자(constructor) 함수가 있는 경우 생성자 함수도 실행합니다. 생성자는 계약 작성과 동일한 트랜잭션에서 실행됩니다. 생성자 함수는 선택 사항입니다. 수도꼭지 예에는 없습니다.
+
 Constructors can be specified in two ways. Up to and including in Solidity v0.4.21, the constructor is a function whose name matches the name of the contract, as you can see here:
 
 [source,solidity]
@@ -490,7 +492,11 @@ contract MEContract {
 
 To summarize, a contract's life cycle starts with a creation transaction from an EOA or contract account. If there is a constructor, it is executed as part of contract creation, to initialize the state of the contract as it is being created, and is then discarded.
 
+요약하면, 계약 수명주기는 EOA 또는 계약 계정에서 생성 트랜잭션으로 시작됩니다. 생성자가 있으면 계약 작성의 일부로 실행되어 작성중인 계약의 상태를 초기화한 다음 삭제됩니다.
+
 ((("contract destruction")))((("selfdestruct function")))((("Solidity","contract destruction")))((("Solidity","selfdestruct function")))The other end of the contract's life cycle is _contract destruction_. ((("SELFDESTRUCT opcode")))Contracts are destroyed by a special EVM opcode called +SELFDESTRUCT+. It used to be called pass:[<span class="keep-together"><code>SUICIDE</code></span>], but that name was deprecated due to the negative associations of the word. In Solidity, this opcode is exposed as a high-level built-in function called +selfdestruct+, which takes one argument: the address to receive any ether balance remaining in the contract account. It looks like this:
+
+계약 수명주기의 다른 끝은 계약 파기입니다. SELFDESTRUCT라는 특수 EVM opcode에 의해 계약이 파기됩니다. 예전에는 SUICIDE라고 불렸지만 그 단어의 부정적인 연관 때문에 그 이름은 더 이상 사용되지 않습니다. Solidity에서이 opcode는 selfdestruct라는 고급 내장 함수로 노출되며 계약 계정에 남아있는 이더 잔액을 수신하는 주소 중 하나의 인수를 취합니다. 다음과 같이 보입니다 :
 
 [source,solidity]
 ----
@@ -501,7 +507,7 @@ selfdestruct(address recipient);
 
 Note that you must explicitly add this command to your contract if you want it to be deletable&#x2014;this is the only way a contract can be deleted, and it is not present by default. In this way, users of a contract who might rely on a contract being there forever can be certain that a contract can't be deleted if it doesn't contain a pass:[<span class="keep-together"><code>SELFDESTRUCT</code></span>] opcode.
 
-*계약을 삭제할 수 있게하려면 계약에 이 명령을 명시적으로 추가해야합니다. & # x2014; 이는 계약을 삭제할 수 있는 유일한 방법이며 디폴트로는 존재하지 않습니다. 이런 식으로, 계약에 영원히 의존 할 수 있는 계약 사용자는 계약이 pass를 포함하지 않으면 계약을 삭제할 수 없다는 것을 확신할 수 있습니다.* pass:[<span class = "keep-together"> <code > SELFDESTRUCT </ code> </ span>]
+계약을 삭제할 수있게하려면 계약에 이 명령을 명시적으로 추가해야합니다. 이는 계약을 삭제할 수있는 유일한 방법이며 기본적으로 존재하지 않습니다. 이런 식으로, 계약에 영원히 의존 할 수 있는 계약 사용자는 SELFDESTRUCT opcode가 포함되지 않은 계약을 삭제할 수 없음을 확신할 수 있습니다.
 
 ==== Adding a Constructor and selfdestruct to Our Faucet Example
 
