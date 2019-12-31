@@ -46,19 +46,19 @@ EVM은 모든 이더리움 노드에서 로컬 인스턴스로 실행되지만 E
 
 ((("transactions","smart contracts and")))Importantly, contracts _only run if they are called by a transaction_. All smart contracts in Ethereum are executed, ultimately, because of a transaction initiated from an EOA. A contract can call another contract that can call another contract, and so on, but the first contract in such a chain of execution will always have been called by a transaction from an EOA. Contracts never run “on their own” or “in the background.” Contracts effectively lie dormant until a transaction triggers execution, either directly or indirectly as part of a chain of contract calls. It is also worth noting that smart contracts are not executed "in parallel" in any sense&#x2014;the Ethereum world computer can be considered to be a single-threaded machine.
 
-중요한 것은 계약이 트랜잭션에 의해 호출된 경우에만 실행된다는 것입니다. 이더리움의 모든 스마트 계약은 궁극적으로 EOA에서 시작된 거래로 인해 실행됩니다. 계약은 다른 계약을 호출할 수있는 다른 계약을 호출 할 수 있지만, 그러한 실행 체인의 첫 번째 계약은 항상 EOA의 트랜잭션에 의해 호출되었을 것입니다. 계약은 "자체적으로" 또는 "백그라운드에서" 실행되지 않습니다. 계약은 일련의 직간접적으로 계약 콜의 일부로서, 트랜잭션이 실행을 트리거 할 때까지 휴면 상태에 있습니다(Contracts effectively lie dormant until a transaction triggers execution, either directly or indirectly as part of a chain of contract calls). 스마트 컨트랙트는 어떤 의미에서든 "병렬"로 실행되지 않는다는 점에 주목할 필요가 있습니다. 이더리움 월드 컴퓨터는 단일 스레드 머신(single-threaded machine)으로 간주될 수 있습니다.
+중요한 것은 계약이 트랜잭션에 의해 호출된 경우에만 실행된다는 것입니다. 이더리움의 모든 스마트 계약은 궁극적으로 EOA에서 시작된 거래로 인해 실행됩니다. 계약은 다른 계약을 호출할 수있는 다른 계약을 호출 할 수 있지만, 그러한 실행 체인의 첫 번째 계약은 항상 EOA의 트랜잭션에 의해 호출되었을 것입니다. 계약은 "자체적으로" 또는 "백그라운드에서" 실행되지 않습니다. 계_약은 일련의 직간접적으로 계약 콜의 일부로서, 트랜잭션이 실행을 트리거 할 때까지 휴면 상태에 있습니다(Contracts effectively lie dormant until a transaction triggers execution, either directly or indirectly as part of a chain of contract calls). 스마트 컨트랙트는 어떤 의미에서든 "병렬"로 실행되지 않는다는 점에 주목할 필요가 있습니다. 이더리움 월드 컴퓨터는 단일 스레드 머신(single-threaded machine)으로 간주될 수 있습니다.
 
 * 계약 실행이 불가능했을 때
 
 ((("transactions","as atomic")))Transactions are _atomic_, regardless of how many contracts they call or what those contracts do when called. Transactions execute in their entirety, with any changes in the global state (contracts, accounts, etc.) recorded only if all execution terminates successfully. Successful termination means that the program executed without an error and reached the end of execution. If execution fails due to an error, all of its effects (changes in state) are “rolled back” as if the transaction never ran. A failed transaction is still recorded as having been attempted, and the ether spent on gas for the execution is deducted from the originating account, but it otherwise has no other effects on contract or account state.
 
-*트랜잭션은 호출하는 계약 수 또는 호출시 해당 계약이 수행하는 작업에 관계없이 _원자성_입니다. 모든 실행이 성공적으로 종료된 경우에만, 전역 상태 (global state)에 변경 사항이 기록되며(계약, 계정 등) 트랜잭션이 전체적으로 실행됩니다. 성공적인 종료는 프로그램이 오류없이 실행되어 실행 종료에 도달했음을 의미합니다. 오류로 인해 실행이 실패하면 트랜잭션이 실행되지 않은 것처럼 모든 영향(상태 변경)이 “복구(rolled back)”됩니다. 실패한 거래는 여전히 시도된 것으로 기록되고, 실행을 위해 gas에 소비된 이더는 원래 계정에서 공제되지만 계약 또는 계정 상태에는 다른 영향이 없습니다.*
+트랜잭션은 호출하는 계약 수 또는 호출시 해당 계약이 수행하는 작업에 관계없이 _원자성_입니다. 모든 실행이 성공적으로 종료된 경우에만, 전역 상태 (global state)에 변경 사항이 기록되며(계약, 계정 등) 트랜잭션이 전체적으로 실행됩니다. *성공적인 종료는 프로그램이 오류없이 실행되어 실행 종료에 도달했음을 의미합니다. 오류로 인해 실행이 실패하면 트랜잭션이 실행되지 않은 것처럼 모든 영향(상태 변경)이 “복구(rolled back)”됩니다. 실패한 거래는 여전히 시도된 것으로 기록되고, 실행을 위해 gas에 소비된 이더는 원래 계정에서 공제되지만 계약 또는 계정 상태에는 다른 영향이 없습니다.*
 
 * 계약의 철회에 관한 기술적 내용
 
 ((("smart contracts","deleting")))As mentioned previously, it is important to remember that a contract’s code cannot be changed. However, a contract can be “deleted,” removing the code and its internal state (storage) from its address, leaving a blank account. Any transactions sent to that account address after the contract has been deleted do not result in any code execution, because there is no longer any code there to execute. ((("SELFDESTRUCT opcode")))To delete a contract, you execute an EVM opcode called +SELFDESTRUCT+ (previously called +SUICIDE+). ((("negative gas")))That operation costs “negative gas,” a gas refund, thereby incentivizing the release of network client resources from the deletion of stored state. Deleting a contract in this way does not remove the transaction history (past) of the contract, since the blockchain itself is immutable. It is also important to note that the +SELFDESTRUCT+ capability will only be available if the contract author programmed the smart contract to have that functionality. If the contract's code does not have a +SELFDESTRUCT+ opcode, or it is inaccessible, the smart contract cannot be deleted.
 
-앞에서 언급했듯이 계약 코드는 변경할 수 없습니다. 그러나 계약을 “삭제”하여 코드와 코드의 내부 상태(저장소)를 주소에서 제거하여 빈 계정을 남길 수 있습니다. 계약이 삭제된 후 해당 계정 주소로 전송된 트랜잭션은 더 이상 실행할 코드가 없기 때문에 코드가 실행되지 않습니다. 계약을 삭제하려면 SELFDESTRUCT(이전의 SUICIDE)라는 EVM opcode를 실행합니다. 이 작업에는 gas 환불인 "negative gas"가 필요하므로, 저장된 상태의 삭제에서 네트워크 클라이언트 리소스의 릴리스를 장려합니다(incentivizing the release of network client resources from the deletion of stored state). 이러한 방식으로 계약을 삭제해도 블록체인 자체는 변경할 수 없으므로 계약의 거래 내역(과거)을 제거하지 않습니다. 계약 작성자가 스마트 계약에 해당 기능을 갖도록 프로그래밍 한 경우에만 SELFDESTRUCT 기능을 사용할 수 있습니다. 계약 코드에 SELFDESTRUCT opcode가 없거나 액세스 할 수 없는 경우 스마트 계약을 삭제할 수 없습니다.
+앞에서 언급했듯이 계약 코드는 변경할 수 없습니다. 그러나 계약을 “삭제”하여 코드와 코드의 내부 상태(저장소)를 주소에서 제거하여 빈 계정을 남길 수 있습니다. 계약이 삭제된 후 해당 계정 주소로 전송된 트랜잭션은 더 이상 실행할 코드가 없기 때문에 코드가 실행되지 않습니다. 계약을 삭제하려면 SELFDESTRUCT(이전의 SUICIDE)라는 EVM opcode를 실행합니다. 이 작업에는 gas 환불인 "negative gas"가 필요하므로, 저장된 상태의 삭제에서 네트워크 클라이언트 리소스의 릴리스를 장려합니다(incentivizing the release of network client resources from the deletion of stored state). 이러한 방식으로 계약을 삭제해도 블록체인 자체는 변경할 수 없으므로 계약의 거래 내역(과거)을 제거하지 않습니다. *계약 작성자가 스마트 계약에 해당 기능을 갖도록 프로그래밍 한 경우에만 SELFDESTRUCT 기능을 사용할 수 있습니다. 계약 코드에 SELFDESTRUCT opcode가 없거나 액세스 할 수 없는 경우 스마트 계약을 삭제할 수 없습니다.*
 
 [[high_level_languages]]
 === Introduction to Ethereum High-Level Languages(넘어가도 될듯)
@@ -537,7 +537,7 @@ We've changed the pragma directive to specify v0.4.22 as the minimum version for
 
 Next, our constructor, which runs as part of the contract creation transaction, assigns the address from +msg.sender+ to the +owner+ variable. We used +msg.sender+ in the pass:[<span class="keep-together"><code>withdraw</code></span>] function to identify the initiator of the withdrawal request. In the constructor, however, the +msg.sender+ is the EOA or contract address that initiated contract creation. We know this is the case _because_ this is a constructor function: it only runs once, during contract creation.
 
-다음으로 계약 생성 트랜잭션의 일부로 실행되는 constructor가 + msg.sender +에서 + owner + 변수로 주소를 할당합니다. 인출 요청의 initiator를 식별하기 위해 pass : [<span class = "keep-together"> <code> withdraw </ code> </ span>] 함수에서 + msg.sender +를 사용했습니다. 그러나 constructor에서 + msg.sender +는 계약 작성을 시작한 EOA 또는 계약 주소입니다. 우리는 이것이 _because_의 경우라는 것을 알고 있습니다. 이것은 constructor 함수입니다: 계약 작성 중에 한 번만 실행됩니다.
+다음으로 계약 작성 트랜잭션의 일부로 실행되는 생성자가 msg.sender의 주소를 소유자 변수에 지정합니다. withdrawl 요청의 개시자를 식별하기 위해 withdrawl 함수에서 msg.sender를 사용했습니다. 그러나 생성자에서 msg.sender는 계약 작성을 시작한 EOA 또는 계약 주소입니다. 우리는 이것이 생성자 함수이기 때문에 이것이 사실임을 알고 있습니다. 계약 작성 중에 한 번만 실행됩니다.
 
 * 계약 삭제
 
@@ -554,7 +554,7 @@ function destroy() public {
 
 If anyone calls this +destroy+ function from an address other than +owner+, it will fail. But if the same address stored in +owner+ by the constructor calls it, the contract will self-destruct and send any remaining balance to the +owner+ address. Note that we did not use the unsafe +tx.origin+ to determine whether the owner wished to destroy the contract&#x2014;using +tx.orgin+ would allow malign contracts to destroy your contract without your permission.
 
-*누군가 + owner + 이외의 주소에서 이 + destroy + 함수를 호출하면 실패합니다. 그러나 constructor가 + owner +에 저장된 동일한 주소로 call하면 계약 자체 소멸되어 나머지 잔액을 + owner + 주소로 보냅니다.* 우리는 소유자가 + tx.orgin +를 사용하여 계약을 파기하고자하는지 여부를 결정하기 위해 안전하지 않은 + tx.origin +를 사용하지 않았습니다.
+*누군가 owner 이외의 주소에서 이 destroy 함수를 호출하면 실패합니다. 그러나 constructor가 owner에 저장된 동일한 주소로 call하면 계약 자체 소멸되어 나머지 잔액을 owner 주소로 보냅니다.*
 
 ==== Function Modifiers
 
@@ -677,7 +677,7 @@ When a contract terminates with an error, all the state changes (changes to vari
 
 ((("assert function","Solidity and")))((("require function")))The +assert+ and +require+ functions operate in the same way, evaluating a condition and stopping execution with an error if the condition is false. By convention, +assert+ is used when the outcome is expected to be true, meaning that we use +assert+ to test internal conditions. By comparison, +require+ is used when testing inputs (such as function arguments or transaction fields), setting our expectations for those pass:[<span class="keep-together">conditions</span>].
 
-+ assert + 및 + require + 함수는 동일한 방식으로 작동하여 조건이 거짓이면 조건을 평가하고 오류로 실행을 중지합니다. 일반적으로 + assert +는 결과가 참일 것으로 예상 될 때 사용됩니다. 즉, + assert +를 사용하여 내부 조건을 테스트합니다. 이에 비해 + require +는 입력 (예 : 함수 인수 또는 트랜잭션 필드)을 테스트할 때 사용됩니다.
+assert 및 require 함수는 동일한 방식으로 작동하여 조건이 거짓이면 조건을 평가하고 오류로 실행을 중지합니다. 일반적으로 assert는 결과가 참일 것으로 예상 될 때 사용됩니다. 즉, assert를 사용하여 내부 조건을 테스트합니다. 이에 비해 require는 함수 인수 또는 트랜잭션 필드와 같은 입력을 테스트 할 때 사용되며 이러한 조건에 대한 기대치를 설정합니다.
 
 We've used +require+ in our function modifier +onlyOwner+, to test that the message sender is the owner of the contract:
 
@@ -717,7 +717,7 @@ msg.sender.transfer(withdraw_amount);
 
 Additional error-checking code like this will increase gas consumption slightly, but it offers better error reporting than if omitted. You will need to find the right balance between gas consumption and verbose error checking based on the expected use of your contract. In the case of a +Faucet+ contract intended for a testnet, we'd probably err on the side of extra reporting even if it costs more gas. Perhaps for a mainnet contract we'd choose to be frugal with our gas usage instead.
 
-이와 같은 추가 오류 검사 코드는 gas 소비를 약간 증가 시키지만 생략 된 경우보다 더 나은 오류보고 기능을 제공합니다. 계약의 예상 사용을 기반으로 gas 소비와 자세한 오류 확인간에 올바른 균형을 찾아야합니다.
+이와 같은 추가 오류 검사 코드는 gas 소비를 약간 증가 시키지만 생략된 경우보다 더 나은 오류보고 기능을 제공합니다. 계약의 예상 사용을 기반으로 gas 소비와 자세한 오류 확인간에 올바른 균형을 찾아야합니다.
 
 [[solidity_events]]
 ==== Events
